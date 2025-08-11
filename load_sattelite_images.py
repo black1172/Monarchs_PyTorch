@@ -20,3 +20,8 @@ def download_sample():
     else:
         print("Sample file already exists!")
     return filename
+
+# TEST CODE
+if __name__ == "__main__":
+    filename = download_sample()
+    print(f"Ready to work with: {filename}")
