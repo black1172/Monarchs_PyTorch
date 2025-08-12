@@ -3,25 +3,6 @@ import os
 import numpy as np
 import rasterio
 
-def debug_file(filename):
-    print(f"\n🔧 Debugging {filename}...")
-    
-    if os.path.exists(filename):
-        file_size = os.path.getsize(filename)
-        print(f"File size: {file_size} bytes")
-        
-        # Read first few bytes to see what we actually got
-        with open(filename, 'rb') as f:
-            first_bytes = f.read(100)
-            print(f"First 100 bytes: {first_bytes}")
-            
-        # Also read as text to see if it's an HTML error
-        with open(filename, 'r', errors='ignore') as f:
-            first_text = f.read(200)
-            print(f"As text: {first_text}")
-    else:
-        print("File doesn't exist!")
-
 def examine_satellite_data(filename):
     print(f"\nExamining {filename}...")
     

@@ -10,3 +10,7 @@
 # Display plans
 -Graph thats color coded with ranking of most to least suitable
 
+# Struggles
+-Handling extremely large image sizes on just my personal machine and particularly vs code
+-Finding high res free satellite images that are up to date
+
