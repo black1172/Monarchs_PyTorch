@@ -27,7 +27,7 @@ def download_sample():
     import requests
 
     # Correct raw GitHub link
-    url = "https://raw.githubusercontent.com/mommermi/geotiff_sample/master/sample.tif"
+    url = "https://gisftp.oit.ohio.gov/OSIP/2022/FRANKLIN/ORTHO/OSIP_Franklin_2022_12345.zip"
     filename = "sample_satellite.tif"
 
     if os.path.exists(filename):
