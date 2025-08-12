@@ -22,40 +22,6 @@ def debug_file(filename):
     else:
         print("File doesn't exist!")
 
-
-def download_sample():
-    import requests
-
-    # Correct raw GitHub link
-    url = "https://gisftp.oit.ohio.gov/OSIP/2022/FRANKLIN/ORTHO/OSIP_Franklin_2022_12345.zip"
-    filename = "sample_satellite.tif"
-
-    if os.path.exists(filename):
-        print("Sample file already exists!")
-        return filename
-
-    print("Downloading sample file...")
-
-    # Step 1: Make a request with streaming
-    response = requests.get(url, stream=True)
-    response.raise_for_status()  # Stop if HTTP error
-
-    # Step 2: Save file in chunks
-    with open(filename, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
-
-    # Step 3: Validate file magic number (TIFF starts with 'II' or 'MM')
-    with open(filename, 'rb') as f:
-        start_bytes = f.read(4)
-        if not (start_bytes.startswith(b'II') or start_bytes.startswith(b'MM')):
-            os.remove(filename)
-            raise ValueError("Downloaded file is not a valid TIFF. It may be HTML or an error page.")
-
-    print(f"Downloaded and verified: {filename}")
-    return filename
-
-
 def examine_satellite_data(filename):
     print(f"\nExamining {filename}...")
     
@@ -70,7 +36,7 @@ def examine_satellite_data(filename):
 
 # TEST CODE
 if __name__ == "__main__":
-    filename = download_sample()
+    filename = "test\m_3908453_se_16_1_20130924_20131031.jp2"
     print(f"Ready to work with: {filename}")
     debug_file(filename)
     examine_satellite_data(filename)
