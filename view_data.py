@@ -5,7 +5,6 @@ import rasterio
 import matplotlib.pyplot as plt
 
 def visualize_bands(filename):
-    """Let's see what each band looks like"""
     with rasterio.open(filename) as src:
         data = src.read()  # Shape: (4, height, width)
         
