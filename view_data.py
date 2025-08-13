@@ -30,3 +30,29 @@ def visualize_bands(filename):
         plt.title('RGB Composite')
         plt.axis('off')
         plt.show()
+
+def confirm_nir_band(filename):
+    with rasterio.open(filename) as src:
+        data = src.read().astype(float)
+        
+        # NAIP typically: Band 1=Red, Band 2=Green, Band 3=Blue, Band 4=NIR
+        red = data[0]   # Band 1 
+        nir = data[3]   # Band 4 (your guess)
+        
+        # Calculate NDVI
+        ndvi = (nir - red) / (nir + red + 1e-8)
+        
+        print(f"Using Band 1 (Red) and Band 4 (NIR):")
+        print(f"NDVI range: {ndvi.min():.3f} to {ndvi.max():.3f}")
+        print(f"NDVI mean: {ndvi.mean():.3f}")
+        
+        # Save NDVI image
+        plt.figure(figsize=(8, 6))
+        plt.imshow(ndvi, cmap='RdYlGn', vmin=-0.5, vmax=1.0)
+        plt.title('NDVI (Red-Yellow-Green = Low-Medium-High Vegetation)')
+        plt.colorbar()
+        plt.savefig('ndvi_test.png')
+        plt.close()
+        print("Saved ndvi_test.png")
+        
+        return data
