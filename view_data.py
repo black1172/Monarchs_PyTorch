@@ -58,19 +58,25 @@ def confirm_nir_band(filename):
         
         return data
 
-def test_patch(satellite_tensor):
-    # Take a small patch from your satellite data
-    print(f"Your full image shape: {satellite_tensor.shape}")
+def gen_patches(satellite_tensor):
+    # The full image shape: (4, H, W)
+    print(f"The full image shape: {satellite_tensor.shape}")
 
-    # Extract a 256x256 patch for testing
-    test_patch = satellite_tensor[:, 1000:1128, 1000:1128]  # (4, 128, 128)
-    print(f"Test patch shape: {test_patch.shape}")
+    # Break the image into smaller patches and create a batch
+    patch_batch = []
+    height = 0
+    width = 0
 
-    # Add batch dimension: model expects (batch_size, channels, height, width)
-    test_batch = torch.unsqueeze(test_patch, 0)  # (1, 4, 128, 128)
-    print(f"Test batch shape: {test_batch.shape}")
+    # Generate patches
+    while height < satellite_tensor.shape[2]:
+        while width < satellite_tensor.shape[3]:
+            patch = satellite_tensor[:, height:height+128, width:width+128]
+            patch_batch.append(patch)
+            width += 128
+        height += 128
+        width = 0
 
-    return test_batch
+    return torch.unsqueeze(patch_batch, 0)  # Return a batch
 
 def examine_satellite_data(filename):
     print(f"\nExamining {filename}...")
