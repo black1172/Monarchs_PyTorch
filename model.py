@@ -33,3 +33,15 @@ model.fc = nn.Linear(
     in_features=model.fc.in_features,
     out_features=8         # this is needed to match the number of output classes
 )
+
+# Define what each class number means
+habitat_classes = {
+    0: "Grassland/Prairie",     # High suitability - milkweed habitat
+    1: "Wetland/Riparian",      # High suitability - swamp milkweed
+    2: "Agricultural/Cropland", # Medium suitability - field margins
+    3: "Forest Edge",           # Medium suitability - nectar sources
+    4: "Urban/Suburban",        # Low suitability - depends on management
+    5: "Water Bodies",          # No suitability - context only
+    6: "Developed/Roads",       # No suitability
+    7: "Other/Barren"           # No suitability
+}
