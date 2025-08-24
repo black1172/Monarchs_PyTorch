@@ -63,15 +63,15 @@ def gen_patches(satellite_tensor):
     print(f"The full image shape: {satellite_tensor.shape}")
 
     # Break the image into smaller patches and create a batch
-    patch_batch = []
+    patch_batch = torch.tensor([]).float()
     height = 0
     width = 0
 
-    # Generate patches
+    # Generate patches (input is [1, channels, H, W])
     while height < satellite_tensor.shape[2]:
         while width < satellite_tensor.shape[3]:
             patch = satellite_tensor[:, height:height+128, width:width+128]
-            patch_batch.append(patch)
+            patch_batch = torch.cat((patch_batch, patch), dim=0)
             width += 128
         height += 128
         width = 0

@@ -17,17 +17,28 @@ habitat_model.eval()  # Set to eval mode
 
 # load and split up image into smaller tensors
 satellite_tensor = lsd.load_satellite_image_as_tensor(filename).float()
-test_batch = vd.test_patch(satellite_tensor).float()
+print(f"Satellite tensor shape: {satellite_tensor.shape}")
+
+# NOTE: Tensor shape is [4, H, W]
+
+satellite_tensor = satellite_tensor.unsqueeze(0)  # Add list dimension
+
+# NOTE: Tensor shape is [1, 4, H, W]
+
+patches_batch = vd.gen_patches(satellite_tensor).float()
+print(f"Patches batch shape: {patches_batch.shape}")
 
 # Create batches
-batches = []
-batches.append(test_batch)
+batches = torch.empty(0, 4, 128, 128).float()
+batches = torch.cat((batches, patches_batch), dim=0)
 
-for test_batch in batches:
+print(f"Batch shape: {batches.shape}")
+
+for patch_batch in batches:
     with torch.no_grad():
         try:
-            output = habitat_model(test_batch)
-            print("Model works!")
+            output = habitat_model(patch_batch)
+            print("Model works!")   
             
             probabilities = torch.softmax(output, dim=1)
             predicted_class = torch.argmax(probabilities, dim=1)
