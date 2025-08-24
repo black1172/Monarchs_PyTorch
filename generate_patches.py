@@ -9,15 +9,15 @@ def gen_patches_overlapping(satellite_tensor, patch_size, overlap_percent=20):
     print(f"Stride: {stride} pixels")
     
     channels, height, width = satellite_tensor.shape
-    patches = []
-    positions = []
+    patches = torch.empty((0, channels, patch_size, patch_size))  # To store patches
+    positions = torch.empty((0, 2), dtype=torch.int)  # To store (row, col) positions of patches
     
     for row in range(0, height - patch_size + 1, stride):
         for col in range(0, width - patch_size + 1, stride):
             patch = satellite_tensor[:, row:row+patch_size, col:col+patch_size]
-            patches.append(patch)
-            positions.append((row, col))
-    
+            patches = torch.cat((patches, patch.unsqueeze(0)), dim=0)
+            positions = torch.cat((positions, torch.tensor([[row, col]])), dim=0)
+
     print(f"Total patches: {len(patches)}")
     return torch.stack(patches), positions
 

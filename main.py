@@ -5,6 +5,7 @@ import rasterio
 from model import MonarchHabitatResNet50 as MHR
 import torch
 import calculate_patches as cp
+import generate_patches as gp
 
 # -------------------------------
 # Configuration
@@ -32,7 +33,7 @@ def main():
     # NOTE: satellite_tensor is expected to be [4, H, W]
 
     # Create patch batches
-    patch_batch = vd.gen_patches(satellite_tensor, patch_size)
+    patch_batch = gp.gen_patches_overlapping(satellite_tensor, patch_size)
     print(f"Batch shape: {patch_batch.shape}")
 
     # NOTE: patch_batch is expected to be [N, 4, H, W]
