@@ -26,7 +26,7 @@ batches.append(test_batch)
 for test_batch in batches:
     with torch.no_grad():
         try:
-            output = habitat_model(image)
+            output = habitat_model(test_batch)
             print("Model works!")
             
             probabilities = torch.softmax(output, dim=1)
