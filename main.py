@@ -16,8 +16,8 @@ habitat_model = MHR(
 habitat_model.eval()  # Set to eval mode
 
 # load and split up image into smaller tensors
-satellite_tensor = lsd.load_satellite_image_as_tensor(filename)
-test_batch = vd.test_patch(satellite_tensor)
+satellite_tensor = lsd.load_satellite_image_as_tensor(filename).float()
+test_batch = vd.test_patch(satellite_tensor).float()
 
 for image in test_batch:
     with torch.no_grad():
