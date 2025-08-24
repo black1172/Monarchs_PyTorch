@@ -19,7 +19,11 @@ habitat_model.eval()  # Set to eval mode
 satellite_tensor = lsd.load_satellite_image_as_tensor(filename).float()
 test_batch = vd.test_patch(satellite_tensor).float()
 
-for image in test_batch:
+# Create batches
+batches = []
+batches.append(test_batch)
+
+for test_batch in batches:
     with torch.no_grad():
         try:
             output = habitat_model(image)
