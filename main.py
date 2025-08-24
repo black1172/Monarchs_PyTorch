@@ -10,7 +10,7 @@ import generate_patches as gp
 # -------------------------------
 # Configuration
 # -------------------------------
-patch_size = 128
+patch_size = 512
 num_of_images = 1
 channels = 4
 filename = "test\\m_3908453_se_16_1_20130924_20131031.jp2"
