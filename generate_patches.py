@@ -29,8 +29,8 @@ def gen_patches_overlapping(satellite_tensor, patch_size, overlap_percent=20):
             patches[idx] = satellite_tensor[:, row:row+patch_size, col:col+patch_size]
             positions[idx] = torch.tensor([row, col])
             idx += 1
-    
-    return patches, positions  # Return separately, not stacked
+
+    return patches.clone()
 
 def gen_patches(satellite_tensor, patch_shape):
     # Break the image into smaller patches and create a batch

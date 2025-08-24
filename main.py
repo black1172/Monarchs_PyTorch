@@ -10,7 +10,7 @@ import generate_patches as gp
 # -------------------------------
 # Configuration
 # -------------------------------
-patch_size = 512
+patch_size = 1024
 num_of_images = 1
 channels = 4
 filename = "test\\m_3908453_se_16_1_20130924_20131031.jp2"
@@ -28,30 +28,16 @@ def main():
 
     # Load image and convert to tensor
     satellite_tensor = lsd.load_satellite_image_as_tensor(filename).float()
-    print(f"Satellite tensor shape: {satellite_tensor.shape}")
 
     # NOTE: satellite_tensor is expected to be [4, H, W]
 
     # Create patch batches
-    patch_batch = gp.gen_patches_overlapping(satellite_tensor, patch_size)
-    print(f"Batch shape: {patch_batch.shape}")
+    patch_batch = gp.gen_patches_overlapping(satellite_tensor, patch_size).float()
 
     # NOTE: patch_batch is expected to be [N, 4, H, W]
 
-    # Add batch dimension
-    satellite_tensor = satellite_tensor.unsqueeze(0)
-    print(f"Tensor shape with batch: {satellite_tensor.shape}")
-    
-    # Calculate number of patches
-    num_of_patches = cp.calculate_patches(satellite_tensor, patch_size)
-
-    # Format into batches
-    batches = torch.tensor([num_of_images, num_of_patches, channels, patch_size, patch_size]).float()
-    print(f"Patches batch shape: {batches.shape}")
-    batches = torch.stack((batches, patch_batch), dim=0)
-
     # Run inference on each patch
-    for patch_batch in batches:
+    for patch in patch_batch:
         with torch.no_grad():
             try:
                 output = habitat_model(patch_batch)
