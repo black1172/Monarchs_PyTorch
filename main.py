@@ -10,6 +10,8 @@ import calculate_patches as cp
 # Configuration
 # -------------------------------
 patch_size = 128
+num_of_images = 1
+channels = 4
 filename = "test\\m_3908453_se_16_1_20130924_20131031.jp2"
 # -------------------------------
 
@@ -27,21 +29,25 @@ def main():
     satellite_tensor = lsd.load_satellite_image_as_tensor(filename).float()
     print(f"Satellite tensor shape: {satellite_tensor.shape}")
 
-    # Calculate number of patches
-    num_of_patches = cp.calculate_patches(satellite_tensor, patch_size)
+    # NOTE: satellite_tensor is expected to be [4, H, W]
+
+    # Create patch batches
+    patch_batch = vd.gen_patches(satellite_tensor, patch_size)
+    print(f"Batch shape: {patch_batch.shape}")
+
+    # NOTE: patch_batch is expected to be [N, 4, H, W]
 
     # Add batch dimension
     satellite_tensor = satellite_tensor.unsqueeze(0)
     print(f"Tensor shape with batch: {satellite_tensor.shape}")
+    
+    # Calculate number of patches
+    num_of_patches = cp.calculate_patches(satellite_tensor, patch_size)
 
-    # Generate patches
-    patches_batch = vd.gen_patches(satellite_tensor).float()
-    print(f"Patches batch shape: {patches_batch.shape}")
-
-    # Create batches
-    batches = torch.empty(0, 4, 128, 128).float()
-    batches = torch.cat((batches, patches_batch), dim=0)
-    print(f"Batch shape: {batches.shape}")
+    # Format into batches
+    batches = torch.tensor([num_of_images, num_of_patches, channels, patch_size, patch_size]).float()
+    print(f"Patches batch shape: {batches.shape}")
+    batches = torch.stack((batches, patch_batch), dim=0)
 
     # Run inference on each patch
     for patch_batch in batches:
