@@ -2,47 +2,38 @@ import torch
 import torch.nn as nn
 from torchvision.models import resnet50, ResNet50_Weights
 
-# from torchgeo.models import ResNet50_Weights, resnet50  # torchgeo had too many dependencies for windows
-model = resnet50(weights=ResNet50_Weights.DEFAULT)
-print("Loaded ImageNet pre-trained ResNet50")
+class MonarchHabitatResNet50(nn.Module):
+    def __init__(self, num_classes=8, in_channels=3):
+        super().__init__()
+        self.model = resnet50(weights=ResNet50_Weights.DEFAULT)
+        print("Loaded ImageNet pre-trained ResNet50")
 
-# look at the input layer
-print("Original INPUT layer:")
-print(f"  Type: {type(model.conv1)}")
-print(f"  Input channels: {model.conv1.in_channels}")
-print(f"  Output channels: {model.conv1.out_channels}")
+        self.model.conv1 = nn.Conv2d(
+            in_channels=in_channels,
+            out_channels=64,
+            kernel_size=7,
+            stride=2,
+            padding=3,
+            bias=False
+        )
 
-# Input model
-model.conv1 = nn.Conv2d(
-    in_channels=3,          # this is needed to match the number of input channels of the model
-    out_channels=64, 
-    kernel_size=7, 
-    stride=2, 
-    padding=3, 
-    bias=False
-    )
+        self.model.fc = nn.Linear(
+            in_features=self.model.fc.in_features,
+            out_features=num_classes
+        )
 
-# look at the output layer  
-print("\nOriginal OUTPUT layer:")
-print(f"  Type: {type(model.fc)}")  # note linear output
-print(f"  Input features: {model.fc.in_features}")
-print(f"  Output classes: {model.fc.out_features}")
+        # Define class mapping
+        self.habitat_classes = {
+            0: "Grassland/Prairie",
+            1: "Wetland/Riparian",
+            2: "Agricultural/Cropland",
+            3: "Forest Edge",
+            4: "Urban/Suburban",
+            5: "Water Bodies",
+            6: "Developed/Roads",
+            7: "Other/Barren"
+        }
 
-# Output model
-model.fc = nn.Linear(
-    in_features=model.fc.in_features,
-    out_features=8         # this is needed to match the number of output classes
-)
-
-# Define what each class number means
-habitat_classes = {
-    0: "Grassland/Prairie",     # High suitability - milkweed habitat
-    1: "Wetland/Riparian",      # High suitability - swamp milkweed
-    2: "Agricultural/Cropland", # Medium suitability - field margins
-    3: "Forest Edge",           # Medium suitability - nectar sources
-    4: "Urban/Suburban",        # Low suitability - depends on management
-    5: "Water Bodies",          # No suitability - context only
-    6: "Developed/Roads",       # No suitability
-    7: "Other/Barren"           # No suitability
-}
+    def forward(self, x):
+        return self.model(x)
 
