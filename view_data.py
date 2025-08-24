@@ -69,3 +69,18 @@ def test_patch(satellite_tensor):
     # Add batch dimension: model expects (batch_size, channels, height, width)
     test_batch = torch.unsqueeze(test_patch, 0)  # (1, 4, 256, 256)
     print(f"Test batch shape: {test_batch.shape}")
+
+    return test_batch
+
+def examine_satellite_data(filename):
+    print(f"\nExamining {filename}...")
+    
+    # Open the satellite file
+    with rasterio.open(filename) as src:
+        data = src.read()  # This reads all the bands
+
+        # Print basic information about the data
+        print(f"Data shape: {data.shape}")
+        print(f"Data type: {data.dtype}")
+        print(f"Min value: {data.min()}")
+        print(f"Max value: {data.max()}")
