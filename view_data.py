@@ -3,6 +3,7 @@ import os
 import numpy as np
 import rasterio
 import matplotlib.pyplot as plt
+import torch
 
 def visualize_bands(filename):
     with rasterio.open(filename) as src:
@@ -66,5 +67,5 @@ def test_patch(satellite_tensor):
     print(f"Test patch shape: {test_patch.shape}")
 
     # Add batch dimension: model expects (batch_size, channels, height, width)
-    test_batch = test_patch.unsqueeze(0)  # (1, 4, 256, 256)
+    test_batch = torch.unsqueeze(test_patch, 0)  # (1, 4, 256, 256)
     print(f"Test batch shape: {test_batch.shape}")
