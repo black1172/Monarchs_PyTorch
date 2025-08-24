@@ -58,23 +58,6 @@ def confirm_nir_band(filename):
         
         return data
 
-def gen_patches(satellite_tensor, patch_shape):
-    # Break the image into smaller patches and create a batch
-    patch_batch = torch.empty((1, 4, patch_shape, patch_shape))
-    height = 0
-    width = 0
-
-    # Generate patches (input is [channels, H, W])
-    while height < satellite_tensor.shape[1]:
-        while width < satellite_tensor.shape[2]:
-            patch = satellite_tensor[:, height:height+128, width:width+128].unsqueeze(0)
-            patch_batch = torch.cat((patch_batch, patch), dim=0)
-            width += 128
-        height += 128
-        width = 0
-
-    return patch_batch  # Return a batch
-
 def examine_satellite_data(filename):
     print(f"\nExamining {filename}...")
     
