@@ -19,5 +19,5 @@
 # Key Moments
 -Used imaging of each band individually to extract the NIR portion of the image. Plants reflect lots of NIR light so they appear distinctly in this band of an image!
 -Genereted a NIR image with a key confirming and mapping vegitation density!
--Realized that deep learning is not feasbale and/or not needed, switching to max entropy model
+-Realized that deep learning is not feasbale and/or not needed, switching to Random Forest
 
