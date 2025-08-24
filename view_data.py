@@ -56,3 +56,15 @@ def confirm_nir_band(filename):
         print("Saved ndvi_test.png")
         
         return data
+
+def test_patch(satellite_tensor):
+    # Take a small patch from your satellite data
+    print(f"Your full image shape: {satellite_tensor.shape}")
+
+    # Extract a 256x256 patch for testing
+    test_patch = satellite_tensor[:, 1000:1256, 1000:1256]  # (4, 256, 256)
+    print(f"Test patch shape: {test_patch.shape}")
+
+    # Add batch dimension: model expects (batch_size, channels, height, width)
+    test_batch = test_patch.unsqueeze(0)  # (1, 4, 256, 256)
+    print(f"Test batch shape: {test_batch.shape}")

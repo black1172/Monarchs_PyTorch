@@ -24,7 +24,7 @@ model.conv1 = nn.Conv2d(
 
 # look at the output layer  
 print("\nOriginal OUTPUT layer:")
-print(f"  Type: {type(model.fc)}")
+print(f"  Type: {type(model.fc)}")  # note linear output
 print(f"  Input features: {model.fc.in_features}")
 print(f"  Output classes: {model.fc.out_features}")
 
@@ -45,3 +45,4 @@ habitat_classes = {
     6: "Developed/Roads",       # No suitability
     7: "Other/Barren"           # No suitability
 }
+
